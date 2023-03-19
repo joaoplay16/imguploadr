@@ -4,6 +4,8 @@
   "description": "Social image-sharing site",
   "main": "index.js",
   "scripts": {
+    "start": "node server",
+    "dev": "nodemon server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "João Pedro",
@@ -17,5 +19,8 @@
     "method-override": "^3.0.0",
     "moment": "^2.29.4",
     "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.21"
   }
 }
