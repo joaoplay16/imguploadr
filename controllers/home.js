@@ -11,7 +11,7 @@ module.exports = {
           filename: "sample1.jpg",
           views: 0,
           likes: 0,
-          timestamp: Date.now,
+          timestamp: Date.now(),
         },
         {
           uniqueId: 2,
@@ -20,7 +20,7 @@ module.exports = {
           filename: "sample2.jpg",
           views: 0,
           likes: 0,
-          timestamp: Date.now,
+          timestamp: Date.now(),
         },
         {
           uniqueId: 3,
@@ -29,7 +29,7 @@ module.exports = {
           filename: "sample3.jpg",
           views: 0,
           likes: 0,
-          timestamp: Date.now,
+          timestamp: Date.now(),
         },
         {
           uniqueId: 4,
@@ -38,7 +38,7 @@ module.exports = {
           filename: "sample4.jpg",
           views: 0,
           likes: 0,
-          timestamp: Date.now,
+          timestamp: Date.now(),
         },
       ],
     }
