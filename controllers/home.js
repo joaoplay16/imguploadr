@@ -11,7 +11,7 @@ module.exports = {
       {},
       {},
       { sort: { timestamp: -1 } },
-    ).exec().then(images => {
+    ).lean().exec().then(images => {
       viewModel.images = images
       sidebar(viewModel, function (viewModel) {
         res.render("index", viewModel)
