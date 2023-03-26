@@ -56,32 +56,39 @@ module.exports = {
         imgUrl += possible.charAt(Math.floor(Math.random() * possible.length))
       }
 
-      var tempPath = req.file.path,
-        ext = path.extname(req.file.originalname).toLowerCase(),
-        targetPath = path.resolve("./public/upload/" + imgUrl + ext)
+      Models.Image.find({ filename: imgUrl }, function (err, images) {
+        if (images.length > 0) {
+          // if a matching image was found, try again (start over):
+          saveImage()
+        } else {
+          var tempPath = req.file.path,
+            ext = path.extname(req.file.originalname).toLowerCase(),
+            targetPath = path.resolve("./public/upload/" + imgUrl + ext)
 
-      if (
-        ext === ".png" ||
-        ext === ".jpg" ||
-        ext === ".jpeg" ||
-        ext === ".gif"
-      ) {
-        fs.rename(tempPath, targetPath, function (err) {
-          if (err) throw err
-          res.redirect("/images/" + imgUrl)
-        })
-      } else {
-        fs.unlink(tempPath, function () {
-          if (err) throw err
+          if (
+            ext === ".png" ||
+            ext === ".jpg" ||
+            ext === ".jpeg" ||
+            ext === ".gif"
+          ) {
+            fs.rename(tempPath, targetPath, function (err) {
+              if (err) throw err
+              res.redirect("/images/" + imgUrl)
+            })
+          } else {
+            fs.unlink(tempPath, function () {
+              if (err) throw err
 
-          res.json(500, { error: "Only image files are allowed." })
-        })
-      }
+              res.json(500, { error: "Only image files are allowed." })
+            })
+          }
+        }
+      })
     }
     saveImage()
   },
   like: function (req, res) {
-    res.json({likes: 1})
+    res.json({ likes: 1 })
   },
   comment: function (req, res) {
     res.send("The image:comment POST controller")
