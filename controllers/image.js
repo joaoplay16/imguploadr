@@ -1,42 +1,51 @@
 var fs = require("fs"),
   path = require("path"),
-  sidebar = require("../helpers/sidebar")
+  sidebar = require("../helpers/sidebar"),
+  Models = require("../models")
 
 module.exports = {
   index: function (req, res) {
     var viewModel = {
-      image: {
-        uniqueId: 1,
-        title: "Sample Image 1",
-        description: "",
-        filename: "sample1.jpg",
-        views: 0,
-        likes: 0,
-        timestamp: Date.now,
-      },
-      comments: [
-        {
-          image_id: 1,
-          email: "test@testing.com",
-          name: "Test Tester",
-          gravatar: "http://lorempixel.com/75/75/animals/1",
-          comment: "This is a test comment...",
-          timestamp: Date.now(),
-        },
-        {
-          image_id: 1,
-          email: "test@testing.com",
-          name: "Test Tester",
-          gravatar: "http://lorempixel.com/75/75/animals/2",
-          comment: "Another followup comment!",
-          timestamp: Date.now(),
-        },
-      ],
+      image: {},
+      comments: [],
     }
 
-    sidebar(viewModel, function (viewModel) {
-      res.render("image", viewModel)
-    })
+    Models.Image.findOne(
+      { filename: { $regex: req.params.image_id } },
+      function (err, image) {
+        if (err) {
+          throw err
+        }
+        if (image) {
+          image.views = image.views + 1
+          viewModel.image = image
+          image.save()
+
+          Models.Comment.find(
+            { image_id: image._id },
+            {},
+            {
+              sort: {
+                timestamp: 1,
+              },
+            },
+            function (err, comments) {
+              if (err) {
+                throw err
+              }
+
+              viewModel.comments = comments
+
+              sidebar(viewModel, function (viewModel) {
+                res.render("image", viewModel)
+              })
+            }
+          )
+        } else {
+          res.redirect("/")
+        }
+      }
+    )
   },
   create: function (req, res) {
     var saveImage = function () {
