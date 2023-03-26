@@ -11,15 +11,13 @@ module.exports = {
       {},
       {},
       { sort: { timestamp: -1 } },
-      function (err, images) {
-        if (err) {
-          throw err
-        }
-        viewModel.images = images
-        sidebar(viewModel, function (viewModel) {
-          res.render("index", viewModel)
-        })
-      }
-    )
+    ).exec().then(images => {
+      viewModel.images = images
+      sidebar(viewModel, function (viewModel) {
+        res.render("index", viewModel)
+      })
+    }).catch(err => {
+      throw err
+    })
   },
 }
