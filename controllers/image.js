@@ -15,7 +15,7 @@ module.exports = {
       .then((image) => {
         if (image) {
           image.views = image.views + 1
-          viewModel.image = image
+          viewModel.image = image.toJSON()
           image.save()
 
           Models.Comment.find(
