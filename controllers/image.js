@@ -1,7 +1,8 @@
 var fs = require("fs"),
   path = require("path"),
   sidebar = require("../helpers/sidebar"),
-  Models = require("../models")
+  Models = require("../models"),
+  md5 = require("md5")
 
 module.exports = {
   index: function (req, res) {
@@ -79,8 +80,8 @@ module.exports = {
                   filename: imgUrl + ext,
                   description: req.body.description,
                 })
-                newImg.save().then(image => {
-                  console.log("IMAGE RETRIEVED", image);
+                newImg.save().then((image) => {
+                  console.log("IMAGE RETRIEVED", image)
                   res.redirect("/images/" + image.uniqueId)
                 })
               })
@@ -111,6 +112,25 @@ module.exports = {
     })
   },
   comment: function (req, res) {
-    res.send("The image:comment POST controller")
+    Models.Image.findOne({ filename: { $regex: req.params.image_id } })
+    .then(image => {
+        if (image) {
+          var newComment = new Models.Comment(req.body)
+          newComment.gravatar = md5(newComment.email)
+          newComment.image_id = image._id
+
+          newComment
+            .save()
+            .then((comment) => {
+              res.redirect(`/images/${image.uniqueId}#${comment._id}`)
+            })
+            .catch((err) => {
+              res.json(err)
+            })
+        } else {
+          res.redirect("/")
+        }
+      }
+    )
   },
 }
