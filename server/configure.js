@@ -14,6 +14,7 @@ var path = require("path"),
 
 module.exports = function (app) {
   app.use(morgan("dev"))
+  app.use(express.urlencoded({ extended: true }))
   app.use(multer({ dest: path.join(__dirname, 'public/upload/temp')}).single('file'))
   app.use(methodOverride())
   app.use(cookieParser("some-secret-value-here"))
