@@ -8,7 +8,9 @@ var path = require("path"),
   methodOverride = require("method-override"),
   errorHandler = require("errorhandler"),
   moment = require("moment"),
-  multer = require('multer')
+  multer = require('multer'),
+  _handlebars = require('handlebars'),
+  {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access')
 
 module.exports = function (app) {
   app.use(morgan("dev"))
@@ -25,6 +27,7 @@ module.exports = function (app) {
   app.engine(
     "handlebars",
     exphbs.create({
+      handlebars: allowInsecurePrototypeAccess(_handlebars),
       defaultLayout: "main",
       layoutsDir: app.get("views") + "/layouts",
       partialsDir: [app.get("views") + "/partials"],

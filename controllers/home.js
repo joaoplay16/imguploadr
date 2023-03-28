@@ -1,4 +1,4 @@
-var sidebar = require("../helpers/sidebar")
+var sidebar = require("../helpers/sidebar"),
 ImageModel = require("../models").Image
 
 module.exports = {
@@ -11,7 +11,7 @@ module.exports = {
       {},
       {},
       { sort: { timestamp: -1 } },
-    ).lean().exec().then(images => {
+    ).exec().then(images => {
       viewModel.images = images
       sidebar(viewModel, function (viewModel) {
         res.render("index", viewModel)
