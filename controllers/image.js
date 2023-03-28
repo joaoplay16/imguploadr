@@ -15,7 +15,7 @@ module.exports = {
       .then((image) => {
         if (image) {
           image.views = image.views + 1
-          viewModel.image = image.toJSON()
+          viewModel.image = image
           image.save()
 
           Models.Comment.find(
@@ -98,7 +98,17 @@ module.exports = {
     saveImage()
   },
   like: function (req, res) {
-    res.json({ likes: 1 })
+    Models.Image.findOne({ filename: { $regex: req.params.image_id }})
+    .then(image => {
+      if(image){
+        image.likes = image.likes +1
+        image.save().then(() => {
+          res.json({likes: image.likes})
+        }).catch(err => {
+          res.json(err)
+        })
+      }
+    })
   },
   comment: function (req, res) {
     res.send("The image:comment POST controller")
