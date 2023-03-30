@@ -1,41 +1,28 @@
+var models = require("../models")
+
 module.exports = {
   newest: function () {
-    var comments = [
-      {
-        image_id: 1,
-        email: "test@testing.com",
-        name: "Test Tester",
-        gravatar: "http://lorempixel.com/75/75/animals/1",
-        comment: "This is a test comment...",
-        timestamp: Date.now(),
-        image: {
-          uniqueId: 1,
-          title: "Sample Image 1",
-          description: "",
-          filename: "sample1.jpg",
-          views: 0,
-          likes: 0,
-          timestamp: Date.now,
-        },
-      },
-      {
-        image_id: 1,
-        email: "test@testing.com",
-        name: "Test Tester",
-        gravatar: "http://lorempixel.com/75/75/animals/2",
-        comment: "Another followup comment!",
-        timestamp: Date.now(),
-        image: {
-          uniqueId: 1,
-          title: "Sample Image 1",
-          description: "",
-          filename: "sample1.jpg",
-          views: 0,
-          likes: 0,
-          timestamp: Date.now,
-        },
-      },
-    ]
-    return comments
+    return models.Comment.find({}, {}, { limit: 5, sort: { timestamp: -1 } })
+    .lean()  
+    .exec()
+      .then(async (comments) => {
+        var attachImage = function (comment) {
+          return models.Image.findOne({ _id: comment.image_id })
+            .exec()
+            .catch((err) => {
+              throw err
+            })
+        }
+
+        for (var i = 0; i < comments.length; i++) {
+          var attachedImage = await attachImage(comments[i])
+          comments[i].image = attachedImage
+        }
+
+        return comments
+      })
+      .catch((err) => {
+        throw err
+      })
   },
 }
