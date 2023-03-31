@@ -5,7 +5,7 @@ var Stats = require("./stats"),
 module.exports = async function (viewModel, callback) {
   viewModel.sidebar = {
     stats: await Stats(),
-    popular: Images.popular(),
+    popular: await Images.popular(),
     comments: await Comments.newest(),
   }
   callback(viewModel)
