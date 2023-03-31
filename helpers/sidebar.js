@@ -3,11 +3,10 @@ var Stats = require("./stats"),
   Comments = require("./comments")
 
 module.exports = async function (viewModel, callback) {
-  var newestComments =  await Comments.newest()
   viewModel.sidebar = {
-    stats: Stats(),
+    stats: await Stats(),
     popular: Images.popular(),
-    comments: newestComments,
+    comments: await Comments.newest(),
   }
   callback(viewModel)
 }
