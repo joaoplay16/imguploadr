@@ -14,7 +14,7 @@ module.exports = async function () {
     ]).exec()
       .then((result) => {
         var viewsTotal = 0;
-        viewsTotal += result[0].viewsTotal;
+        viewsTotal += result[0]?.viewsTotal || 0;
 
         return viewsTotal;
       }),
@@ -28,7 +28,7 @@ module.exports = async function () {
     ]).exec()
       .then((result) => {
         var likesTotal = 0;
-        likesTotal += result[0].likesTotal;
+        likesTotal += result[0]?.likesTotal || 0;
 
         return likesTotal;
       }),
