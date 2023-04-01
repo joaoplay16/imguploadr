@@ -142,7 +142,8 @@ module.exports = {
     .exec()  
     .then((image) => {
         fs.unlink(
-          path.resolve(`./public/upload/${image.filename}`, function (err) {
+          path.resolve(`./public/upload/${image.filename}`),
+          function (err) {
             if (err) {
               throw err
             }
@@ -150,15 +151,16 @@ module.exports = {
             Models.Comment.deleteMany({ image_id: image._id })
             .exec()
             .then(() => {
-              image.deleteOne().exec().then(() => {
+              image.deleteOne()
+              .then(() => {
                 res.json(true)
               })
             })
             .catch(err => {
               res.json(false)
             })
-          })
-        );
+          }  
+        )
       })
       .catch((err) => {
         throw err;
