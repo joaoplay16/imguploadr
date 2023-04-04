@@ -8,17 +8,22 @@ var path = require("path"),
   methodOverride = require("method-override"),
   errorHandler = require("errorhandler"),
   moment = require("moment"),
-  multer = require('multer'),
-  _handlebars = require('handlebars'),
-  {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access')
+  multer = require("multer"),
+  _handlebars = require("handlebars"),
+  {
+    allowInsecurePrototypeAccess,
+  } = require("@handlebars/allow-prototype-access")
 
 module.exports = function (app) {
   app.use(morgan("dev"))
   app.use(express.urlencoded({ extended: true }))
-  app.use(multer({ dest: path.join(__dirname, 'public/upload/temp')}).single('file'))
+  app.use(
+    multer({ dest: path.join(__dirname, "public/upload/temp") }).single("file")
+  )
   app.use(methodOverride())
   app.use(cookieParser("some-secret-value-here"))
-  routes(app) //moving the routes to routes folder.
+  router = routes.initialize(express.Router())
+  app.use("/", router)
   app.use("/public/", express.static(path.join(__dirname, "../public")))
 
   if ("development" === app.get("env")) {
