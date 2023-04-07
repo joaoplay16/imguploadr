@@ -40,6 +40,8 @@ describe("Image Controller", function () {
       likes: 0,
       save: sinon.spy(),
     }
+
+  
   })
   describe("Index", function () {
     it("should be defined", function () {
@@ -48,6 +50,12 @@ describe("Image Controller", function () {
     it("should call Models.Image.findOne", function () {
       image.index(req, res)
       expect(ModelsStub.Image.findOne).to.be.called
+    })
+    it("should find Image by parameter id", function () {
+      image.index(req, res)
+      expect(ModelsStub.Image.findOne).to.be.calledWith(
+        { filename: { $regex: "testing" } }
+      )
     })
   })
 })
