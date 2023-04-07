@@ -15,8 +15,13 @@ module.exports = {
       .exec()
       .then((image) => {
         if (image) {
+          console.log("IMAGEM", image);
           image.views = image.views + 1;
+          console.log("ICRECEMTN", image);
+
           viewModel.image = image;
+          console.log("viewModel", viewModel);
+
           image.save();
 
           Models.Comment.find(
