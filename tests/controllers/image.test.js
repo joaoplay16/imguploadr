@@ -6,14 +6,10 @@ var proxyquire = require("proxyquire"),
   md5Stub = {},
   ModelsStub = {
     Image: {
-      findOne: sinon
-        .stub()
-        .returns({ exec: () => sinon.promise() }),
+      findOne: sinon.stub().returns({ exec: () => sinon.promise() }),
     },
     Comment: {
-      find: sinon
-        .stub()
-        .returns({ exec: () => sinon.promise() }),
+      find: sinon.stub().returns({ exec: () => sinon.promise() }),
     },
   },
   image = proxyquire("../../controllers/image", {
@@ -38,23 +34,13 @@ describe("Image Controller", function () {
     req.params = {
       image_id: "testing",
     }
-    ;(testImage = {
+    testImage = {
       _id: 1,
       title: "Test Image",
       views: 0,
       likes: 0,
       save: sinon.spy(),
-    }),
-      (testComents = [
-        {
-          image_id: 1,
-          email: "example@example.comment",
-          name: "sir example",
-          gravatar: "",
-          comment: "Noiçe",
-          timestamp: Date.now,
-        },
-      ])
+    }
   })
   describe("Index", function () {
     it("should be defined", function () {
@@ -88,7 +74,6 @@ describe("Image Controller", function () {
           {},
           { sort: { timestamp: 1 } }
         )
-        expect(testComents).to.be.an("array").that.is.not.empty
       })
       // it("should execute sidebar", function () {
       //   ModelsStub.Comment.find = sinon.stub().callsArgWith(3, null, [1, 2, 3])
