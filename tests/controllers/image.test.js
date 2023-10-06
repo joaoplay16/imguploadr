@@ -6,10 +6,14 @@ var proxyquire = require("proxyquire"),
   md5Stub = {},
   ModelsStub = {
     Image: {
-      findOne: sinon.stub().returns({ exec: () => sinon.promise() }),
+      findOne: sinon
+        .stub()
+        .returns({ exec: () => sinon.promise() }),
     },
     Comment: {
-      find: sinon.stub().returns({ exec: () => sinon.promise() }),
+      find: sinon
+        .stub()
+        .returns({ exec: () => sinon.promise() }),
     },
   },
   image = proxyquire("../../controllers/image", {
@@ -55,25 +59,25 @@ describe("Image Controller", function () {
         filename: { $regex: "testing" },
       })
     })
-    // describe("with found image model", function () {
-    //   beforeEach(function () {
-    //     ModelsStub.Image.findOne = sinon
-    //       .stub()
-    //       .returns({ exec: () => sinon.promise().resolve( testImage ) })
-    //   })
-    //   it("should incremement views by 1 and save", function () {
-    //     image.index(req, res)
-    //     expect(testImage.views).to.equal(1)
-    //     expect(testImage.save).to.be.called
-    //   })
-    //   it("should find related comments", function () {
-    //     image.index(req, res)
-    //     expect(ModelsStub.Comment.find).to.be.calledWith(
-    //       { image_id: 1 },
-    //       {},
-    //       { sort: { timestamp: 1 } }
-    //     )
-    //   })
+    describe("with found image model", function () {
+      beforeEach(function () {
+        ModelsStub.Image.findOne = sinon.stub().returns({
+          exec: () => sinon.promise().resolve(testImage),
+        })
+      })
+      it("should incremement views by 1 and save", async function () {
+        await image.index(req, res)
+        expect(testImage.views).to.equal(1)
+        expect(testImage.save).to.be.called
+      })
+      //   it("should find related comments", function () {
+      //     image.index(req, res)
+      //     expect(ModelsStub.Comment.find).to.be.calledWith(
+      //       { image_id: 1 },
+      //       {},
+      //       { sort: { timestamp: 1 } }
+      //     )
+      //   })
       // it("should execute sidebar", function () {
       //   ModelsStub.Comment.find = sinon.stub().callsArgWith(3, null, [1, 2, 3])
       //   image.index(req, res)
@@ -91,6 +95,6 @@ describe("Image Controller", function () {
       //     comments: [1, 2, 3],
       //   })
       // })
-    // })
+    })
   })
 })
