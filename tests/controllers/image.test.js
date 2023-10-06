@@ -25,7 +25,8 @@ var proxyquire = require("proxyquire"),
   }),
   res = {},
   req = {},
-  testImage = {}
+  testImage = {},
+  testComents = []
 
 describe("Image Controller", function () {
   beforeEach(function () {
@@ -37,13 +38,23 @@ describe("Image Controller", function () {
     req.params = {
       image_id: "testing",
     }
-    testImage = {
+    ;(testImage = {
       _id: 1,
       title: "Test Image",
       views: 0,
       likes: 0,
       save: sinon.spy(),
-    }
+    }),
+      (testComents = [
+        {
+          image_id: 1,
+          email: "example@example.comment",
+          name: "sir example",
+          gravatar: "",
+          comment: "Noiçe",
+          timestamp: Date.now,
+        },
+      ])
   })
   describe("Index", function () {
     it("should be defined", function () {
@@ -70,14 +81,15 @@ describe("Image Controller", function () {
         expect(testImage.views).to.equal(1)
         expect(testImage.save).to.be.called
       })
-      //   it("should find related comments", function () {
-      //     image.index(req, res)
-      //     expect(ModelsStub.Comment.find).to.be.calledWith(
-      //       { image_id: 1 },
-      //       {},
-      //       { sort: { timestamp: 1 } }
-      //     )
-      //   })
+      it("should find related comments", async function () {
+        await image.index(req, res)
+        expect(ModelsStub.Comment.find).to.be.calledWith(
+          { image_id: 1 },
+          {},
+          { sort: { timestamp: 1 } }
+        )
+        expect(testComents).to.be.an("array").that.is.not.empty
+      })
       // it("should execute sidebar", function () {
       //   ModelsStub.Comment.find = sinon.stub().callsArgWith(3, null, [1, 2, 3])
       //   image.index(req, res)
