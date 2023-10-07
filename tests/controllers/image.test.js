@@ -61,6 +61,27 @@ describe("Image Controller", function () {
         ModelsStub.Image.findOne = sinon.stub().returns({
           exec: () => sinon.promise().resolve(testImage),
         })
+        ModelsStub.Comment.find = sinon
+          .stub()
+          .withArgs(
+            { image_id: 1 },
+            {},
+            {
+              sort: {
+                timestamp: 1,
+              },
+            }
+          )
+          .returns({
+            exec: () =>
+              sinon.promise().resolve({
+                comments: [
+                  {
+                    image_id: 1,
+                  },
+                ],
+              }),
+          })
       })
       it("should incremement views by 1 and save", async function () {
         await image.index(req, res)
@@ -75,17 +96,17 @@ describe("Image Controller", function () {
           { sort: { timestamp: 1 } }
         )
       })
-      // it("should execute sidebar", function () {
+      it("should execute sidebar", async function () {
+        await image.index(req, res)
+        expect(ModelsStub.Comment.find).to.be.called
+        expect(sidebarStub).to.be.called
+      })
+      // it("should render image template with image and comments", function () {
       //   ModelsStub.Comment.find = sinon.stub().callsArgWith(3, null, [1, 2, 3])
-      //   image.index(req, res)
-      //   expect(sidebarStub).to.be.calledWith(
+      //   sidebarStub.callsArgWith(
       //     { image: testImage, comments: [1, 2, 3] },
       //     sinon.match.func
       //   )
-      // })
-      // it("should render image template with image and comments", function () {
-      //   ModelsStub.Comment.find = sinon.stub().callsArgWith(3, null, [1, 2, 3])
-      //   sidebarStub.callsArgWith(1, { image: testImage, comments: [1, 2, 3] })
       //   image.index(req, res)
       //   expect(res.render).to.be.calledWith("image", {
       //     image: testImage,
