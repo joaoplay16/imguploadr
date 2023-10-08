@@ -3,10 +3,17 @@ var Stats = require("./stats"),
   Comments = require("./comments")
 
 module.exports = async function (viewModel) {
+  const [stats, popular, comments] = await Promise.all([
+    Stats(),
+    Images.popular(),
+    Comments.newest(),
+  ])
+
   viewModel.sidebar = {
-    stats: await Stats(),
-    popular: await Images.popular(),
-    comments: await Comments.newest(),
+    stats,
+    popular,
+    comments,
   }
+
   return Promise.resolve(viewModel)
 }
