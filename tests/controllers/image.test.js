@@ -101,18 +101,20 @@ describe("Image Controller", function () {
         expect(ModelsStub.Comment.find).to.be.called
         expect(sidebarStub).to.be.called
       })
-      // it("should render image template with image and comments", function () {
-      //   ModelsStub.Comment.find = sinon.stub().callsArgWith(3, null, [1, 2, 3])
-      //   sidebarStub.callsArgWith(
-      //     { image: testImage, comments: [1, 2, 3] },
-      //     sinon.match.func
-      //   )
-      //   image.index(req, res)
-      //   expect(res.render).to.be.calledWith("image", {
-      //     image: testImage,
-      //     comments: [1, 2, 3],
-      //   })
-      // })
+      it("should render image template with image and comments", function (done) {
+        image.index(req, res)
+        done()
+        expect(sidebarStub).to.be.calledWith({
+          image: testImage,
+          comments: [
+            {
+              image_id: 1,
+            },
+          ],
+        })
+
+        expect(res.render).to.be.calledWith("image", sinon.match.object)
+      })
     })
   })
 })
