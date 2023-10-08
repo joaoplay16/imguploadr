@@ -126,6 +126,17 @@ describe("Image Controller", function () {
 
         expect(res.render).to.be.calledWith("image", testComents)
       })
+
+      it("should redirect to '/' when image is not found", function (done) {
+        ModelsStub.Image.find = sinon
+          .stub()
+          .returns(sinon.promise().resolve(null))
+
+        image.index(req, res)
+        done()
+
+        expect(res.redirect).to.be.calledWith("/")
+      })
     })
   })
 })
