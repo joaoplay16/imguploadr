@@ -11,7 +11,7 @@ module.exports = {
       comments: [],
     }
 
-    Models.Image.findOne({ filename: { $regex: req.params.image_id } })
+    return Models.Image.findOne({ filename: { $regex: req.params.image_id } })
       .exec()
       .then((image) => {
         if (image) {
