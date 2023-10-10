@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server",
     "dev": "nodemon server",
-    "test": "mocha -r tests/testhelper.js -R spec tests/**/*.test.js"
+    "test": "mocha -r tests/testhelper.js -R spec tests/**/*.test.js",
+    "test:watch": "mocha --watch -r tests/testhelper.js -R spec tests/**/*.test.js"
   },
   "author": "João Pedro",
   "license": "MIT",
