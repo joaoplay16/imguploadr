@@ -3,7 +3,11 @@ var proxyquire = require("proxyquire"),
   sidebarStub = sinon
     .stub()
     .returns(sinon.promise().resolve({ image: {}, comments: [] })),
-  fsStub = {},
+  fsStub = {
+    rename: function (tempPath, targetPath, callback) {
+      callback()
+    },
+  },
   pathStub = {},
   md5Stub = {},
   ModelsStub = {
