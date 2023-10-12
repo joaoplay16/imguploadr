@@ -56,7 +56,7 @@ module.exports = {
         imgUrl += possible.charAt(Math.floor(Math.random() * possible.length))
       }
 
-      Models.Image.find({ filename: imgUrl })
+      return Models.Image.find({ filename: imgUrl })
         .exec()
         .then((images) => {
           if (images.length > 0) {
@@ -74,6 +74,7 @@ module.exports = {
               ext === ".gif"
             ) {
               fs.rename(tempPath, targetPath, function (err) {
+                console.log("EXT", ext)
                 if (err) throw err
                 var newImg = new Models.Image({
                   title: req.body.title,
@@ -81,7 +82,7 @@ module.exports = {
                   description: req.body.description,
                 })
                 newImg.save().then((image) => {
-                  console.log("IMAGE RETRIEVED", image)
+                  console.log("newImage", image)
                   res.redirect("/images/" + image.uniqueId)
                 })
               })
@@ -96,7 +97,7 @@ module.exports = {
           throw err
         })
     }
-    saveImage()
+    return saveImage()
   },
   like: function (req, res) {
     Models.Image.findOne({ filename: { $regex: req.params.image_id } }).then(

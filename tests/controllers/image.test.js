@@ -15,7 +15,6 @@ var proxyquire = require("proxyquire"),
     Image: {
       findOne: sinon.stub().returns({ exec: () => sinon.promise() }),
       find: sinon.stub().returns({ exec: () => sinon.promise() }),
-      save: sinon.stub().returns({ exec: () => sinon.promise() }),
     },
     Comment: {
       find: sinon.stub().returns({ exec: () => sinon.promise() }),
