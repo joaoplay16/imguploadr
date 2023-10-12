@@ -6,7 +6,10 @@ var proxyquire = require("proxyquire"),
   fsStub = {
     rename: sinon.spy(),
   },
-  pathStub = {},
+  pathStub = {
+    extname: sinon.spy(require("path").extname),
+    resolve: sinon.spy(),
+  },
   md5Stub = {},
   ModelsStub = {
     Image: {
