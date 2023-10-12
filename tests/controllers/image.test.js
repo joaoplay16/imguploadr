@@ -4,9 +4,7 @@ var proxyquire = require("proxyquire"),
     .stub()
     .returns(sinon.promise().resolve({ image: {}, comments: [] })),
   fsStub = {
-    rename: function (tempPath, targetPath, callback) {
-      callback()
-    },
+    rename: sinon.spy(),
   },
   pathStub = {},
   md5Stub = {},
