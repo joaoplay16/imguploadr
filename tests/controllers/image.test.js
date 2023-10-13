@@ -31,7 +31,6 @@ var proxyquire = require("proxyquire"),
   req = {},
   testImage = {},
   testComents = []
-
 describe("Image Controller", function () {
   beforeEach(function () {
     res = {
@@ -142,25 +141,52 @@ describe("Image Controller", function () {
     })
   })
 
-  // describe("Create", function () {
-  //   describe("with uploaded image data", function () {
-  //     beforeEach(function () {
-  //       ModelsStub.Image.find = sinon
-  //         .stub()
-  //         .returns({ exec: () => sinon.promise().resolve([]) })
+  // Todo: make pass
+  describe("Create", function () {
+    describe("with uploaded image data", function () {
+      beforeEach(function () {
+        class Img {
+          constructor() {
+            return sinon.spy(this)
+          }
+          save() {
+            return Promise.resolve({ uniqueId: 123 })
+          }
 
-  //       req.file = {
-  //         originalName: "image.png",
-  //         path: "/home/user/images",
-  //         title: "jaberwok",
-  //         description: "jaberwok is a poem",
-  //       }
-  //     })
-  //     it("should create and save an image", function (done) {
-  //       image.create(req, res)
-  //       expect(res.redirect).to.be.called
-  //       done()
-  //     })
-  //   })
-  // })
+          static findOne(arg) {
+            return { exec: () => Promise.resolve() }
+          }
+          static find(arg) {
+            return { exec: () => Promise.resolve([]) }
+          }
+        }
+
+        var saveStub = sinon.stub()
+        var Image = sinon.stub(require("../../models"), "Image")
+        Image.returns({
+          save: saveStub,
+        })
+
+        ModelsStub.Image = Image
+
+        req.file = {
+          originalname: "image.png",
+          path: "/home/user/images",
+        }
+        req.body = {
+          title: "jaberwok",
+          description: "jaberwok is a poem",
+        }
+      })
+      it("should create and save an image", async function () {
+        await image.create(req, res)
+        expect(pathStub.extname).to.be.called
+        expect(pathStub.resolve).to.be.called
+        expect(fsStub.rename).to.be.called
+
+        expect(ModelsStub.Image).to.be.calledWithNew
+        // expect(res.redirect).to.be.called
+      })
+    })
+  })
 })
