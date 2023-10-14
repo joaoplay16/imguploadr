@@ -189,4 +189,27 @@ describe("Image Controller", function () {
       })
     })
   })
+
+  describe("Like", function () {
+    describe("with found image model", function () {
+      beforeEach(function () {
+        ModelsStub.Image.findOne = sinon
+          .stub()
+          .returns(sinon.promise().resolve(testImage))
+
+        req.params = {
+          image_id: 1,
+        }
+
+        testImage.save = sinon.stub().returns(sinon.promise().resolve())
+      })
+
+      it("should incremement image like count", async function () {
+        await image.like(req, res)
+        expect(testImage.likes).to.equal(1)
+        expect(testImage.save).to.be.called
+        expect(res.json).to.be.calledWith({ likes: 1 })
+      })
+    })
+  })
 })
