@@ -100,21 +100,21 @@ module.exports = {
     return saveImage()
   },
   like: function (req, res) {
-    Models.Image.findOne({ filename: { $regex: req.params.image_id } }).then(
-      (image) => {
-        if (image) {
-          image.likes = image.likes + 1
-          image
-            .save()
-            .then(() => {
-              res.json({ likes: image.likes })
-            })
-            .catch((err) => {
-              res.json(err)
-            })
-        }
+    return Models.Image.findOne({
+      filename: { $regex: req.params.image_id },
+    }).then((image) => {
+      if (image) {
+        image.likes = image.likes + 1
+        image
+          .save()
+          .then(() => {
+            res.json({ likes: image.likes })
+          })
+          .catch((err) => {
+            res.json(err)
+          })
       }
-    )
+    })
   },
   comment: function (req, res) {
     Models.Image.findOne({ filename: { $regex: req.params.image_id } }).then(
