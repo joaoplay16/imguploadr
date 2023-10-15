@@ -139,7 +139,7 @@ module.exports = {
     )
   },
   remove: function (req, res) {
-    Models.Image.findOne({ filename: { $regex: req.params.image_id } })
+    return Models.Image.findOne({ filename: { $regex: req.params.image_id } })
       .exec()
       .then((image) => {
         fs.unlink(
