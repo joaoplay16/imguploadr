@@ -142,53 +142,34 @@ describe("Image Controller", function () {
   })
 
   // Todo: make pass
-  // describe("Create", function () {
-  //   describe("with uploaded image data", function () {
-  //     beforeEach(function () {
-  //       class Img {
-  //         constructor() {
-  //           return sinon.spy(this)
-  //         }
-  //         save() {
-  //           return Promise.resolve({ uniqueId: 123 })
-  //         }
+  describe("Create", function () {
+    describe("with uploaded image data", function () {
+      beforeEach(function () {
+        Object.defineProperty(ModelsStub.Image, "save", {
+          value: () => {},
+          configurable: true,
+        })
 
-  //         static findOne(arg) {
-  //           return { exec: () => Promise.resolve() }
-  //         }
-  //         static find(arg) {
-  //           return { exec: () => Promise.resolve([]) }
-  //         }
-  //       }
+        req.file = {
+          originalname: "image.png",
+          path: "/home/user/images",
+        }
+        req.body = {
+          title: "jaberwok",
+          description: "jaberwok is a poem",
+        }
+      })
+      it("should create and save an image", async function () {
+        await image.create(req, res)
+        expect(pathStub.extname).to.be.called
+        expect(pathStub.resolve).to.be.called
+        expect(fsStub.rename).to.be.called
 
-  //       var saveStub = sinon.stub()
-  //       var Image = sinon.stub(require("../../models"), "Image")
-  //       Image.returns({
-  //         save: saveStub,
-  //       })
-
-  //       ModelsStub.Image = Image
-
-  //       req.file = {
-  //         originalname: "image.png",
-  //         path: "/home/user/images",
-  //       }
-  //       req.body = {
-  //         title: "jaberwok",
-  //         description: "jaberwok is a poem",
-  //       }
-  //     })
-  //     it("should create and save an image", async function () {
-  //       await image.create(req, res)
-  //       expect(pathStub.extname).to.be.called
-  //       expect(pathStub.resolve).to.be.called
-  //       expect(fsStub.rename).to.be.called
-
-  //       // expect(ModelsStub.Image).to.be.calledWithNew
-  //       // expect(res.redirect).to.be.called
-  //     })
-  //   })
-  // })
+        expect(ModelsStub.Image).to.be.calledWithNew
+        // expect(res.redirect).to.be.called
+      })
+    })
+  })
 
   describe("Like", function () {
     describe("with found image model", function () {
