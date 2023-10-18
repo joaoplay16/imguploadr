@@ -24,4 +24,4 @@ ImageSchema.virtual("uniqueId").get(function (this: IImage) {
   return this.filename.replace(path.extname(this.filename), "")
 })
 
-export default mongoose.model<IImage>("Image", ImageSchema)
+module.exports = mongoose.model("Image", ImageSchema)

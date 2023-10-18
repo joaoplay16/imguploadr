@@ -28,4 +28,4 @@ CommentSchema.virtual("image")
     return this._image
   })
 
-export default mongoose.model<IComment>("Comment", CommentSchema)
+module.exports = mongoose.model<IComment>("Comment", CommentSchema)
