@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server",
-    "dev": "nodemon server",
+    "dev": "npx nodemon",
     "test": "mocha -r tests/testhelper.js -R spec tests/**/*.test.js",
     "test:watch": "mocha --watch -r tests/testhelper.js -R spec tests/**/*.test.js"
   },
