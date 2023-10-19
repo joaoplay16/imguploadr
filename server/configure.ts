@@ -1,3 +1,5 @@
+import { Application } from "express"
+
 var path = require("path"),
   routes = require("./routes"),
   exphbs = require("express-handlebars"),
@@ -14,7 +16,7 @@ var path = require("path"),
     allowInsecurePrototypeAccess,
   } = require("@handlebars/allow-prototype-access")
 
-module.exports = function (app) {
+module.exports = function (app: Application) {
   app.use(morgan("dev"))
   app.use(express.urlencoded({ extended: true }))
   app.use(
@@ -22,7 +24,7 @@ module.exports = function (app) {
   )
   app.use(methodOverride())
   app.use(cookieParser("some-secret-value-here"))
-  router = routes.initialize(express.Router())
+  const router = routes.initialize(express.Router())
   app.use("/", router)
   app.use("/public/", express.static(path.join(__dirname, "../public")))
 
@@ -38,7 +40,7 @@ module.exports = function (app) {
       layoutsDir: app.get("views") + "/layouts",
       partialsDir: [app.get("views") + "/partials"],
       helpers: {
-        timeago: function (timestamp) {
+        timeago: function (timestamp: number) {
           return moment(timestamp).startOf("minute").fromNow()
         },
       },

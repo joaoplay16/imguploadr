@@ -1,3 +1,10 @@
+import { Request, Response } from "express"
+import { IImage } from "../models/image"
+import { IComment } from "../models/comment"
+import { Error } from "mongoose"
+import { ViewModel } from "../helpers/sidebar"
+import { MulterRequest } from "../types/express/index.types"
+
 var fs = require("fs"),
   path = require("path"),
   sidebar = require("../helpers/sidebar"),
@@ -5,15 +12,25 @@ var fs = require("fs"),
   md5 = require("md5")
 
 module.exports = {
-  index: function (req, res) {
-    var viewModel = {
-      image: {},
+  index: function (req: Request, res: Response) {
+    var viewModel: ViewModel = {
+      image: {} as IImage,
       comments: [],
+      sidebar: {
+        stats: {
+          images: 0,
+          comments: 0,
+          views: 0,
+          likes: 0,
+        },
+        popular: [],
+        comments: [],
+      },
     }
 
     return Models.Image.findOne({ filename: { $regex: req.params.image_id } })
       .exec()
-      .then((image) => {
+      .then((image: IImage) => {
         if (image) {
           image.views = image.views + 1
           viewModel.image = image
@@ -29,25 +46,25 @@ module.exports = {
             }
           )
             .exec()
-            .then((comments) => {
+            .then((comments: IComment[]) => {
               viewModel.comments = comments
 
-              sidebar(viewModel).then((vm) => {
+              sidebar(viewModel).then((vm: ViewModel) => {
                 res.render("image", vm)
               })
             })
-            .catch((err) => {
+            .catch((err: Error) => {
               throw err
             })
         } else {
           res.redirect("/")
         }
       })
-      .catch((err) => {
+      .catch((err: Error) => {
         throw err
       })
   },
-  create: function (req, res) {
+  create: function (req: Request, res: Response) {
     var saveImage = function () {
       var possible = "abcdefghijklmnopqrstuvwxyz0123456789",
         imgUrl = ""
@@ -58,13 +75,14 @@ module.exports = {
 
       return Models.Image.find({ filename: imgUrl })
         .exec()
-        .then((images) => {
+        .then((images: IImage[]) => {
           if (images.length > 0) {
             // if a matching image was found, try again (start over):
             saveImage()
           } else {
-            var tempPath = req.file.path,
-              ext = path.extname(req.file.originalname).toLowerCase(),
+            const multerRequest = req as MulterRequest
+            var tempPath = multerRequest.file.path,
+              ext = path.extname(multerRequest.file.originalname).toLowerCase(),
               targetPath = path.resolve("./public/upload/" + imgUrl + ext)
 
             if (
@@ -73,7 +91,7 @@ module.exports = {
               ext === ".jpeg" ||
               ext === ".gif"
             ) {
-              fs.rename(tempPath, targetPath, function (err) {
+              fs.rename(tempPath, targetPath, function (err: unknown) {
                 console.log("EXT", ext)
                 if (err) throw err
                 var newImg = new Models.Image({
@@ -81,28 +99,28 @@ module.exports = {
                   filename: imgUrl + ext,
                   description: req.body.description,
                 })
-                newImg.save().then((image) => {
+                newImg.save().then((image: IImage) => {
                   console.log("newImage", image)
                   res.redirect("/images/" + image.uniqueId)
                 })
               })
             } else {
               fs.unlink(tempPath, function () {
-                res.json(500, { error: "Only image files are allowed." })
+                res.status(500).json({ error: "Only image files are allowed." })
               })
             }
           }
         })
-        .catch((err) => {
+        .catch((err: Error) => {
           throw err
         })
     }
     return saveImage()
   },
-  like: function (req, res) {
+  like: function (req: Request, res: Response) {
     return Models.Image.findOne({
       filename: { $regex: req.params.image_id },
-    }).then((image) => {
+    }).then((image: IImage) => {
       if (image) {
         image.likes = image.likes + 1
         image
@@ -116,9 +134,9 @@ module.exports = {
       }
     })
   },
-  comment: function (req, res) {
+  comment: function (req: Request, res: Response) {
     Models.Image.findOne({ filename: { $regex: req.params.image_id } }).then(
-      (image) => {
+      (image: IImage) => {
         if (image) {
           var newComment = new Models.Comment(req.body)
           newComment.gravatar = md5(newComment.email)
@@ -126,10 +144,10 @@ module.exports = {
 
           newComment
             .save()
-            .then((comment) => {
+            .then((comment: IComment) => {
               res.redirect(`/images/${image.uniqueId}#${comment._id}`)
             })
-            .catch((err) => {
+            .catch((err: Error) => {
               res.json(err)
             })
         } else {
@@ -138,13 +156,13 @@ module.exports = {
       }
     )
   },
-  remove: function (req, res) {
+  remove: function (req: Request, res: Response) {
     return Models.Image.findOne({ filename: { $regex: req.params.image_id } })
       .exec()
-      .then((image) => {
+      .then((image: IImage) => {
         fs.unlink(
           path.resolve(`./public/upload/${image.filename}`),
-          function (err) {
+          function (err: Error) {
             if (err) {
               throw err
             }
@@ -156,13 +174,13 @@ module.exports = {
                   res.json(true)
                 })
               })
-              .catch((err) => {
+              .catch((err: Error) => {
                 res.json(false)
               })
           }
         )
       })
-      .catch((err) => {
+      .catch((err: Error) => {
         throw err
       })
   },
