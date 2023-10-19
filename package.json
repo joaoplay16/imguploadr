@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node server",
     "dev": "npx nodemon",
-    "test": "mocha -r tests/testhelper.js -R spec tests/**/*.test.js",
-    "test:watch": "mocha --watch -r tests/testhelper.js -R spec tests/**/*.test.js"
+    "test": "mocha --require ts-node/register -r tests/testhelper.ts -R spec tests/**/*.test.ts",
+    "test:watch": "mocha --watch --require ts-node/register -r tests/testhelper.ts -R spec tests/**/*.test.ts"
   },
   "author": "João Pedro",
   "license": "MIT",
