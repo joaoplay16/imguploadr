@@ -1,8 +1,11 @@
-var proxyquire,
-  expressStub,
-  configStub,
-  mongooseStub,
-  app,
+var proxyquire = require("proxyquire"),
+  expressStub: sinon.SinonStub<any[], any>,
+  configStub: sinon.SinonStub<any[], any>,
+  mongooseStub: {
+    connect: any
+    connection?: { on: sinon.SinonSpy<any[], any> }
+  },
+  app: { set: any; get: any; listen: any },
   server = function () {
     proxyquire("../../server", {
       express: expressStub,
@@ -13,20 +16,20 @@ var proxyquire,
 
 describe("Server", function () {
   beforeEach(function () {
-      proxyquire = require("proxyquire"),
-      app = {
+    ;(proxyquire = require("proxyquire")),
+      (app = {
         set: sinon.spy(),
         get: sinon.stub().returns(3300),
         listen: sinon.spy(),
-      },
-      expressStub = sinon.stub().returns(app),
-      configStub = sinon.stub().returns(app),
-      mongooseStub = {
+      }),
+      (expressStub = sinon.stub().returns(app)),
+      (configStub = sinon.stub().returns(app)),
+      (mongooseStub = {
         connect: sinon.spy(),
         connection: {
           on: sinon.spy(),
         },
-      }
+      })
     delete process.env.PORT
   })
 

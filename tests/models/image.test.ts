@@ -1,7 +1,9 @@
+import { Models } from "mongoose"
+
 var ImageModel = require("../../models/image")
 
 describe("Image Model", function () {
-  var image
+  var image: Models
 
   it("should have a mongoose schema", function () {
     expect(ImageModel.schema).to.exist
