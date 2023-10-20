@@ -3,3 +3,5 @@ package-lock.json
 /public/upload
 /server/public/upload
 .vscode/settings.json
+*lock.json
+/build
