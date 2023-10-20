@@ -6,7 +6,7 @@
   "description": "Social image-sharing site",
   "main": "index.js",
   "scripts": {
-    "start": "node server",
+    "start": "ts-node server",
     "clean": "rimraf build/",
     "copy-files": "copy-files-from-to",
     "build": "npm run clean && tsc && npm run copy-files && npm install",
