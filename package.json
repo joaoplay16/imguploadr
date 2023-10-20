@@ -22,6 +22,10 @@
     {
       "from": "package.json",
       "to": "/build/package.json"
+    },
+    {
+      "from": "/views/**/*",
+      "to": "/build/views"
     }
   ],
   "dependencies": {
