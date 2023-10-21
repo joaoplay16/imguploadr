@@ -6,11 +6,11 @@
   "description": "Social image-sharing site",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node server",
+    "start": "tsx server",
     "clean": "rimraf build/",
     "copy-files": "copy-files-from-to",
     "build": "npm run clean && tsc && npm run copy-files && npm install build/ --omit-dev",
-    "dev": "npx nodemon",
+    "dev": "tsx watch server",
     "test": "mocha --require ts-node/register -r tests/testhelper.ts -R spec tests/**/*.test.ts",
     "test:watch": "mocha --watch --require ts-node/register -r tests/testhelper.ts -R spec tests/**/*.test.ts"
   },
@@ -55,6 +55,7 @@
     "rimraf": "^5.0.5",
     "sinon": "^16.1.1",
     "sinon-chai": "^3.7.0",
+    "tsx": "^3.14.0",
     "typescript": "^5.2.2"
   }
 }
