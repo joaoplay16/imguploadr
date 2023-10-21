@@ -11,8 +11,8 @@
     "copy-files": "copy-files-from-to",
     "build": "npm run clean && tsc && npm run copy-files && npm install build/ --omit-dev",
     "dev": "tsx watch server",
-    "test": "mocha --require ts-node/register -r tests/testhelper.ts -R spec tests/**/*.test.ts",
-    "test:watch": "mocha --watch --require ts-node/register -r tests/testhelper.ts -R spec tests/**/*.test.ts"
+    "test": "mocha --loader=tsx -r tests/testhelper.ts -R spec tests/**/*.test.ts",
+    "test:watch": "mocha --watch --loader=tsx -r tests/testhelper.ts -R spec tests/**/*.test.ts"
   },
   "copyFiles": [
     {
