@@ -12,7 +12,7 @@ var fs = require("fs"),
   md5 = require("md5")
 
 module.exports = {
-  index: function (req: Request, res: Response) {
+  index: function (req: Request, res: Response): Promise<any> {
     var viewModel: ViewModel = {
       image: {} as IImage,
       comments: [],
@@ -64,7 +64,7 @@ module.exports = {
         throw err
       })
   },
-  create: function (req: Request, res: Response) {
+  create: function (req: Request, res: Response): Promise<any> {
     var saveImage = function () {
       var possible = "abcdefghijklmnopqrstuvwxyz0123456789",
         imgUrl = ""
@@ -117,7 +117,7 @@ module.exports = {
     }
     return saveImage()
   },
-  like: function (req: Request, res: Response) {
+  like: function (req: Request, res: Response): Promise<any> {
     return Models.Image.findOne({
       filename: { $regex: req.params.image_id },
     }).then((image: IImage) => {
@@ -156,7 +156,7 @@ module.exports = {
       }
     )
   },
-  remove: function (req: Request, res: Response) {
+  remove: function (req: Request, res: Response): Promise<any> {
     return Models.Image.findOne({ filename: { $regex: req.params.image_id } })
       .exec()
       .then((image: IImage) => {
