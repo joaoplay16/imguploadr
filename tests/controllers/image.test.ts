@@ -15,6 +15,7 @@ var proxyquire = require("proxyquire"),
     Image: {
       findOne: sinon.stub().returns({ exec: () => sinon.promise() }),
       find: sinon.stub().returns({ exec: () => sinon.promise() }),
+      save: sinon.stub(),
     },
     Comment: {
       find: sinon.stub().returns({ exec: () => sinon.promise() }),
@@ -171,18 +172,18 @@ describe("Image Controller", function () {
   describe("Create", function () {
     describe("with uploaded image data", function () {
       beforeEach(function () {
-        var ImageModel = require("../../models").Image
+        // var ImageModel = require("../../models").Image
 
-        Object.defineProperty(ModelsStub.Image, "save", {
-          value: () => {},
-          configurable: true,
-        })
+        // Object.defineProperty(ModelsStub.Image, "save", {
+        //   value: () => {},
+        //   configurable: true,
+        // })
 
         // var stub = sinon.stub(ModelsStub.Image, "save")
 
         // ImageModel.prototype.save = function () {}
 
-        // ModelsStub.Image.save = stub.returnsThis()
+        // ModelsStub.Image.save = sinon.stub()
 
         req.file = {
           originalname: "image.png",
@@ -254,7 +255,7 @@ describe("Image Controller", function () {
         })
       })
 
-      it("should incremement image like count", async function () {
+      it("should remove image and its comments", async function () {
         await image.remove(req, res)
         expect(ModelsStub.Image.findOne).to.be.called
         expect(fsStub.unlink).to.be.calledWith(
