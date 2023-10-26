@@ -89,7 +89,8 @@ module.exports = {
               ext === ".png" ||
               ext === ".jpg" ||
               ext === ".jpeg" ||
-              ext === ".gif"
+              ext === ".gif" ||
+              ext === ".webp"
             ) {
               fs.rename(tempPath, targetPath, function (err: unknown) {
                 console.log("EXT", ext)
