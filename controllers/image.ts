@@ -57,7 +57,7 @@ module.exports = {
               throw err
             })
         } else {
-          res.redirect("/")
+          res.status(404).send("<h2>Error 404: Image not found</h2>")
         }
       })
       .catch((err: Error) => {
