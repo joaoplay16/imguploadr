@@ -23,7 +23,13 @@ $(function () {
         url: "/images/" + imgId,
         type: "DELETE",
       }).done(function (result) {
-        if (result) {
+        const { errorMessage } = result
+        if (errorMessage) {
+          $this.remove()
+          $("#error-message").append(
+            `<span class="alert alert-warning">${errorMessage}</span>`
+          )
+        } else {
           $this.removeClass("btn-danger").addClass("btn-success")
           $this.find("i").removeClass("fa-times").addClass("fa-check")
           $this.append("<span> Deleted!</span>")

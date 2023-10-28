@@ -165,7 +165,12 @@ module.exports = {
           path.resolve(`./public/upload/${image.filename}`),
           function (err: Error) {
             if (err) {
-              throw err
+              console.log(err)
+              res.json({
+                errorMessage: `
+                  Was not possible remove the image. No such file or directory.
+              `,
+              })
             }
 
             Models.Comment.deleteMany({ image_id: image._id })
