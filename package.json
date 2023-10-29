@@ -2,7 +2,7 @@
   "author": "João Pedro",
   "license": "MIT",
   "name": "com.playlab.imgploadr",
-  "version": "1.0.0",
+  "version": "2.1.0",
   "description": "Social image-sharing site",
   "main": "index.js",
   "scripts": {
