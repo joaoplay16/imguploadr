@@ -40,6 +40,7 @@ type TestResponse = {
   render: sinon.SinonSpy
   json: sinon.SinonSpy
   redirect: sinon.SinonSpy
+  status: sinon.SinonSpy
 }
 
 type TestImage = {
@@ -70,6 +71,7 @@ describe("Image Controller", function () {
       render: sinon.spy(),
       json: sinon.spy(),
       redirect: sinon.spy(),
+      status: sinon.stub().returns({ send: () => {} }),
     }
     req.params = {
       image_id: "testing",
@@ -156,14 +158,14 @@ describe("Image Controller", function () {
         expect(res.render).to.be.called
       })
 
-      it("should redirect to '/' when image is not found", async function () {
+      it("should send status 404 when image is not found", async function () {
         ModelsStub.Image.findOne = sinon
           .stub()
           .returns({ exec: () => sinon.promise().resolve(null) })
 
         await image.index(req, res)
 
-        expect(res.redirect).to.be.calledWith("/")
+        expect(res.status).to.be.calledWith(404)
       })
     })
   })
