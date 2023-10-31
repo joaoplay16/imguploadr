@@ -5,11 +5,11 @@ import { Error } from "mongoose"
 import { ViewModel } from "../helpers/sidebar"
 import { MulterRequest } from "../types/express/index.types"
 
-var fs = require("fs"),
-  path = require("path"),
-  sidebar = require("../helpers/sidebar"),
-  Models = require("../models"),
-  md5 = require("md5")
+import fs = require("node:fs/promises")
+import path = require("path")
+const sidebar = require("../helpers/sidebar")
+const Models = require("../models")
+const md5 = require("md5")
 
 module.exports = {
   index: function (req: Request, res: Response): Promise<any> {
@@ -92,9 +92,8 @@ module.exports = {
               ext === ".gif" ||
               ext === ".webp"
             ) {
-              fs.rename(tempPath, targetPath, function (err: unknown) {
-                console.log("EXT", ext)
-                if (err) throw err
+              fs.rename(tempPath, targetPath).then(function () {
+                // if (err) throw err
                 var newImg = new Models.Image({
                   title: req.body.title,
                   filename: imgUrl + ext,
@@ -106,7 +105,7 @@ module.exports = {
                 })
               })
             } else {
-              fs.unlink(tempPath, function () {
+              fs.unlink(tempPath).then(function () {
                 res.status(500).json({ error: "Only image files are allowed." })
               })
             }
@@ -161,18 +160,8 @@ module.exports = {
     return Models.Image.findOne({ filename: { $regex: req.params.image_id } })
       .exec()
       .then((image: IImage) => {
-        fs.unlink(
-          path.resolve(`./public/upload/${image.filename}`),
-          function (err: Error) {
-            if (err) {
-              console.log(err)
-              res.json({
-                errorMessage: `
-                  Was not possible remove the image. No such file or directory.
-              `,
-              })
-            }
-
+        fs.unlink(path.resolve(`./public/upload/${image.filename}`))
+          .then(function () {
             Models.Comment.deleteMany({ image_id: image._id })
               .exec()
               .then(() => {
@@ -183,8 +172,14 @@ module.exports = {
               .catch((err: Error) => {
                 res.json(false)
               })
-          }
-        )
+          })
+          .catch((err: Error) => {
+            res.json({
+              errorMessage: `
+                  Was not possible remove the image. No such file or directory.
+              `,
+            })
+          })
       })
       .catch((err: Error) => {
         throw err
