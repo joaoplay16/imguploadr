@@ -138,17 +138,25 @@ module.exports = {
     Models.Image.findOne({ filename: { $regex: req.params.image_id } }).then(
       (image: IImage) => {
         if (image) {
-          var newComment = new Models.Comment(req.body)
-          newComment.gravatar = md5(newComment.email)
-          newComment.image_id = image._id
+          fs.access(path.resolve(`./public/upload/${image.filename}`))
+            .then(function () {
+              var newComment = new Models.Comment(req.body)
+              newComment.gravatar = md5(newComment.email)
+              newComment.image_id = image._id
 
-          newComment
-            .save()
-            .then((comment: IComment) => {
-              res.redirect(`/images/${image.uniqueId}#${comment._id}`)
+              newComment
+                .save()
+                .then((comment: IComment) => {
+                  res.redirect(`/images/${image.uniqueId}#${comment._id}`)
+                })
+                .catch((err: Error) => {
+                  res.json(err)
+                })
             })
-            .catch((err: Error) => {
-              res.json(err)
+            .catch((error: Error) => {
+              res.status(404).send(`
+                <h2>Was not possible comment the image. No such file or directory.</h2>
+            `)
             })
         } else {
           res.redirect("/")
