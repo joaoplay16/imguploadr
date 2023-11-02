@@ -65,6 +65,17 @@ module.exports = {
       })
   },
   create: function (req: Request, res: Response): Promise<any> {
+    const multerRequest = req as MulterRequest
+
+    const fileSize = parseInt(multerRequest.headers["content-length"] ?? "")
+
+    if (fileSize > 1024 * 1024) {
+      res
+        .status(413)
+        .send(`<h2>File is too large to upload. Max file size is 1mb</h2>`)
+      return Promise.resolve()
+    }
+
     var saveImage = function () {
       var possible = "abcdefghijklmnopqrstuvwxyz0123456789",
         imgUrl = ""
@@ -80,7 +91,6 @@ module.exports = {
             // if a matching image was found, try again (start over):
             saveImage()
           } else {
-            const multerRequest = req as MulterRequest
             var tempPath = multerRequest.file.path,
               ext = path.extname(multerRequest.file.originalname).toLowerCase(),
               targetPath = path.resolve("./public/upload/" + imgUrl + ext)
