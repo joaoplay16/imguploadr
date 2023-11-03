@@ -116,7 +116,7 @@ module.exports = {
               })
             } else {
               fs.unlink(tempPath).then(function () {
-                res.status(500).json({ error: "Only image files are allowed." })
+                res.status(415).json({ error: "Only image files are allowed." })
               })
             }
           }
