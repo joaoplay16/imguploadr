@@ -10,6 +10,14 @@ import path = require("path")
 const sidebar = require("../helpers/sidebar")
 const Models = require("../models")
 const md5 = require("md5")
+import multer = require("multer")
+
+const upload = multer({
+  dest: path.resolve("./public/upload/temp"),
+  limits: {
+    fileSize: 1024 * 1024,
+  },
+}).single("file")
 
 module.exports = {
   index: function (req: Request, res: Response): Promise<any> {
@@ -67,16 +75,7 @@ module.exports = {
   create: function (req: Request, res: Response): Promise<any> {
     const multerRequest = req as MulterRequest
 
-    const fileSize = parseInt(multerRequest.headers["content-length"] ?? "0")
-
-    if (fileSize > 1024 * 1024) {
-      res
-        .status(413)
-        .send(`<h2>File is too large to upload. Max file size is 1mb</h2>`)
-      return Promise.resolve()
-    }
-
-    var saveImage = function () {
+    function saveImage() {
       var possible = "abcdefghijklmnopqrstuvwxyz0123456789",
         imgUrl = ""
 
@@ -84,7 +83,7 @@ module.exports = {
         imgUrl += possible.charAt(Math.floor(Math.random() * possible.length))
       }
 
-      return Models.Image.find({ filename: imgUrl })
+      Models.Image.find({ filename: imgUrl })
         .exec()
         .then((images: IImage[]) => {
           if (images.length > 0) {
@@ -125,7 +124,26 @@ module.exports = {
           throw err
         })
     }
-    return saveImage()
+
+    return new Promise<void>((resolve, reject) => {
+      upload(req, res, function (error) {
+        if (error) {
+          reject(error)
+          return
+        }
+        // Everything went fine.
+        saveImage()
+        resolve()
+      })
+    }).catch((error) => {
+      if (error instanceof multer.MulterError) {
+        res
+          .status(413)
+          .send(`<h2>File is too large to upload. Max file size is 1mb</h2>`)
+      } else if (error) {
+        res.status(500).send("An unknown error occurred when uploading.")
+      }
+    })
   },
   like: function (req: Request, res: Response): Promise<any> {
     return Models.Image.findOne({
