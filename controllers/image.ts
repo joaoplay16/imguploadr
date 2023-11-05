@@ -196,29 +196,22 @@ module.exports = {
     return Models.Image.findOne({ filename: { $regex: req.params.image_id } })
       .exec()
       .then((image: IImage) => {
-        fs.unlink(path.resolve(`./public/upload/${image.filename}`))
-          .then(function () {
-            Models.Comment.deleteMany({ image_id: image._id })
-              .exec()
-              .then(() => {
-                image.deleteOne().then(() => {
-                  res.json(true)
-                })
-              })
-              .catch((err: Error) => {
-                res.json(false)
-              })
-          })
-          .catch((err: Error) => {
-            res.json({
-              errorMessage: `
-                  Was not possible remove the image. No such file or directory.
-              `,
+        return Models.Comment.deleteMany({ image_id: image._id })
+          .exec()
+          .then(() => {
+            image.deleteOne().then(() => {
+              res.json(true)
             })
+          })
+          .catch(() => {
+            res.json(false)
+          })
+          .finally(() => {
+            return fs.unlink(path.resolve(`./public/upload/${image.filename}`))
           })
       })
       .catch((err: Error) => {
-        throw err
+        console.log("Error when removing the image")
       })
   },
 }
