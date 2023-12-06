@@ -48,16 +48,16 @@
       <i class="fa fa-comments-o"> Post Comment...</i></button>
   </div>
   <div class="card-body">
-  <blockquote id="post-comment">
+    <blockquote id="post-comment">
       <form method="post" action="/images/{{image.uniqueId}}/comment">
         <div class="form-group col-sm-12">
-          <label class=" control-label" for="name">Name:</label>
+          <label class="control-label" for="name">Name:</label>
           <div class="col-sm-12">
             <input class="form-control" type="text" name="name" />
           </div>
         </div>
         <div class="form-group col-sm-12">
-          <label class=" control-label" for="email">Email:</label>
+          <label class="control-label" for="email">Email:</label>
           <div class="col-sm-12">
             <input class="form-control" type="text" name="email" />
           </div>
@@ -81,10 +81,9 @@
           </div>
         </div>
       </form>
-  </blockquote>
-  <ul class="media-list">
+    </blockquote>
     {{#each comments}}
-      <li class="media">
+      <div class="hstack gap-3">
         <a class="pull-left" href="#">
           <img
             class="media-object img-circle"
@@ -92,13 +91,17 @@
 {{gravatar}}?d=monsterid&s=45"
           />
         </a>
-        <div class="media-body">
-          {{comment}}
-          <br /><strong class="media-heading">{{name}}</strong>
-          <small class="text-muted">{{timeago timestamp}}</small>
+        <div class="vstack">
+          <strong class="text-left">{{name}}</strong>
+          <div class="hstack">
+            <span  style="font-size: .8rem;">{{comment}}</span>
+            <small
+              class="text-muted ms-auto"
+              style="font-size: .6rem;"
+            >{{timeago timestamp}}</small>
+          </div>
         </div>
-      </li>
+      </div>
     {{/each}}
-  </ul>
-</div>
+  </div>
 </div>
