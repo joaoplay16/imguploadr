@@ -1,32 +1,36 @@
 {{#if sidebar.comments}}
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">
+  <div class="card">
+    <div class="card-header">
+      <h5>
         Latest Comments
-      </h3>
+      </h5>
     </div>
-    <div class="panel-body">
-      <ul class="media-list">
+    <div class="card-body">
+      <div class="">
         {{#each sidebar.comments}}
-          <li class="media">
-            <a class="pull-left" href="/images/{{_image.uniqueId}}">
-              <img
-                class="media-object"
-                width="45"
-                height="45"
-                src="/public/upload/{{_image.filename}}"
-              />
-            </a>
-            <div class="media-body">
-              {{comment}}<br />
-              <strong class="media-heading">
-                {{name}}</strong>
-              <small class="text-muted">
-                {{timeago timestamp}}</small>
+          <a
+            class="text-reset text-decoration-none"
+            href="/images/{{_image.uniqueId}}"
+          >
+            <div class="d-flex align-items-center">
+              <div class="flex-shrink-0">
+                <img
+                  width="64"
+                  height="64"
+                  src="/public/upload/{{_image.filename}}"
+                />
+              </div>
+              <div class="flex-grow-1 ms-3">
+                <div class="vstack">
+                  <strong>{{name}}</strong>
+                  <small class="text-muted">{{timeago timestamp}}</small>
+                  <span>{{comment}}</span>
+                </div>
+              </div>
             </div>
-          </li>
+          </a>
         {{/each}}
-      </ul>
+      </div>
     </div>
   </div>
 {{/if}}

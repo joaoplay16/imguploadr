@@ -1,19 +1,19 @@
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">
+<div class="card mb-3 mt-3">
+  <div class="card-header">
+    <h5>
       Most Popular
-    </h3>
+    </h5>
   </div>
-  <div class="panel-body">
-    {{#each sidebar.popular}}
-      <div class="col-md-4 text-center" style="padding-bottom: .5em;">
+  <div class="card-body">
+    <div class="d-flex flex-wrap gap-2">
+      {{#each sidebar.popular}}
         <a href="/images/{{uniqueId}}"><img
             src="/public/upload/{{filename}}"
             style="width: 75px; height: 75px;"
             class="img-thumbnail"
           />
         </a>
-      </div>
-    {{/each}}
+      {{/each}}
+    </div>
   </div>
 </div>

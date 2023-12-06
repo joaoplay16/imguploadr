@@ -1,32 +1,27 @@
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">
+<div class="card">
+  <div class="card-header">
+    <h5>
       Stats
-    </h3>
+    </h5>
   </div>
-  <div class="panel-body">
-    <div class="row">
-      <div class="col-md-10 text-right">
-        <span class="col-md-2 text-left">Images:</span>
-        <span class="badge badge-secondary">{{sidebar.stats.images}} </span>
+  <div class="card-body">
+    <div class="vstack gap-1">
+      <div class="hstack gap-3">
+        <div class="">Images:</div>
+        <div class="badge bg-secondary ms-auto">{{sidebar.stats.images}} </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-md-10 text-right">
-        <span class="col-md-2 text-left">Comments:</span>
-        <span class="badge badge-secondary">{{sidebar.stats.comments}} </span>
+      <div class="hstack gap-3">
+        <div class="">Comments:</div>
+        <div class="badge bg-dark ms-auto">{{sidebar.stats.comments}}
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-md-10 text-right">
-        <span class="col-md-2 text-left">Views:</span>
-        <span class="badge badge-secondary">{{sidebar.stats.views}} </span>
+      <div class="hstack gap-3">
+        <div class="">Comments:</div>
+        <div class="badge bg-primary ms-auto" style="--bs-bg-opacity: .8;">{{sidebar.stats.views}} </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-md-10 text-right">
-        <span class="col-md-2 text-left">Likes:</span>
-        <span class="badge badge-secondary">{{sidebar.stats.likes}} </span>
+      <div class="hstack gap-3">
+        <div class="">Likes:</div>
+        <div class="badge bg-success ms-auto">{{sidebar.stats.likes}} </div>
       </div>
     </div>
   </div>
