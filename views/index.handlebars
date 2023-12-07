@@ -1,15 +1,11 @@
-<div class="panel panel-primary">
-  <div class="panel-heading">
-    <h3 class="panel-title">
+<div class="card">
+  <div class="card-header">
+    <h5>
       Upload an Image
-    </h3>
+    </h5>
   </div>
-  <form
-    method="post"
-    action="/images"
-    enctype="multipart/form-data"
-  >
-    <div class="panel-body form-horizontal">
+  <div class="card-body form-horizontal">
+    <form method="post" action="/images" enctype="multipart/form-data">
       <div class="form-group col-md-12">
         <label class="col-sm-2 control-label" for="file">Browse:</label>
         <div class="col-md-10">
@@ -44,16 +40,16 @@
             Upload Image</button>
         </div>
       </div>
-    </div>
-  </form>
-</div>
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">
-      Newest Images
-    </h3>
+    </form>
   </div>
-  <div class="panel-body">
+</div>
+<div class="card mt-3">
+  <div class="card-header">
+    <h5>
+      Newest Images
+    </h5>
+  </div>
+  <div class="card-body">
     {{#each images}}
       <div class="col-md-4 text-center" style="padding-bottom: 1em;">
         <a href="/images/{{uniqueId}}">
