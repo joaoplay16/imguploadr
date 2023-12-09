@@ -7,8 +7,11 @@
   <div class="card-body form-horizontal">
     <form method="post" action="/images" enctype="multipart/form-data">
       <div class="form-group col-md-12">
+         <div class="form-group col-md-12 mb-2 d-flex justify-content-center ">
+          <img class="img-fluid mx-auto" src="" alt="File Preview" id="preview">
+        </div>
         <div >
-          <input class="form-control" type="file" name="file" id="file" />
+          <input class="form-control" type="file" name="file" id="fileInput" onchange="previewFile()"/>
         </div>
       </div>
       <div class="form-group col-md-12 my-2">

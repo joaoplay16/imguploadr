@@ -38,3 +38,24 @@ $(function () {
     }
   })
 })
+
+
+function previewFile() {
+  var fileInput = document.getElementById('fileInput');
+  var preview = document.getElementById('preview');
+  var file = fileInput.files[0];
+  var reader = new FileReader();
+
+  reader.onloadend = function () {
+    preview.src = reader.result;
+  };
+
+  if (file) {
+    reader.readAsDataURL(file);
+  } else {
+    preview.src = '/public/img/image_placeholder.png';
+  }
+}
+
+// keep preview when reload the page
+previewFile()
