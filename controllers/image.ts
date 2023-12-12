@@ -74,7 +74,11 @@ module.exports = {
   },
   create: function (req: Request, res: Response): Promise<any> {
     const multerRequest = req as MulterRequest
-
+    if (multerRequest.file === undefined){
+      let errorMessage = "400 Bad Request. Please select a file to upload."
+      res.status(400).send(errorMessage)
+      return Promise.reject(errorMessage)
+    }
     function saveImage() {
       var possible = "abcdefghijklmnopqrstuvwxyz0123456789",
         imgUrl = ""
