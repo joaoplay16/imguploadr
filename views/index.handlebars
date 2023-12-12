@@ -24,6 +24,20 @@
           <textarea class="form-control" name="description" rows="2" placeholder="Description"></textarea>
         </div>
       </div>
+      <style>
+        @keyframes moveUpDown {
+          0%, 100% {
+            transform: translateY(-3px);
+          }
+          50% {
+            transform: translateY(3px);
+          }
+        }
+
+        #upload-icon {
+          animation: moveUpDown 2s ease-out infinite;
+        }
+      </style>
         <div class="col-md-12 mt-2 d-flex justify-content-end ">
           <button
             type="submit"
@@ -31,7 +45,9 @@
             class="btn btn-success"
             type="button"
           >
-            <i class="fa fa-cloud-upload">
+            <i id="upload-icon" class="fa fa-cloud-upload" style="
+                anim
+            ">
             </i>
             Upload Image</button>
         </div>
